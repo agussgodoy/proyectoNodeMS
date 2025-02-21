@@ -1,0 +1,25 @@
+{
+  "name": "proyectonodems",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/agussgodoy/proyectoNodeMS#readme",
+  "bugs": {
+    "url": "https://github.com/agussgodoy/proyectoNodeMS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agussgodoy/proyectoNodeMS.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
