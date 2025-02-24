@@ -3,6 +3,7 @@
 const express = require('express')
 const routerConfig = require('./routes/index.routes')
 const globalConstants = require('./const/globalConstants')
+const logger = require('morgan');
 
 
 
@@ -12,6 +13,9 @@ const configuracionApi = (app) =>{
     app.use(express.json())
     // permite que express entienda formularios enviados por post y por put
     app.use(express.urlencoded({ extended: true }))
+    app.use(logger('dev'))
+
+    return
 
 } 
 
