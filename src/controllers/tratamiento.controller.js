@@ -5,31 +5,58 @@ module.exports = {
 
 
     listar: async (req, res) =>{
-
+        
+        const tratamientos = await model.tratamiento.findAll()
+    
         res.json({
             success:true,
             data:{
-                message:"Este endpoint retorna el listado de tratamientos"
+                tratamientos: tratamientos
             }
         })
     }, 
 
     infoTratamiento: async (req, res) => {
 
-        res.json({
-            success: true,
-            data: {
-                message: 'Este endpoint retorna la info del tratamiento que viene por parámetro'
+        const tratamiento = await model.tratamiento.findOne({
+            where: {
+                id: req.params.idTratamiento
             }
         })
+
+        if(tratamiento){
+
+            res.json({
+                success: true,
+                data: {
+                    tratamiento: tratamiento
+                }
+            })
+        }else{
+            res.json({
+                success: false,
+                message: "No se encotró el tratamiento"
+            })
+        }
     }, 
 
     crear: async (req, res) => {
-        res.json({
-            success:true,
-            data:{
-                message: 'Este endopoint crea un tratamiento'
-            }
-        })
+
+        try{
+
+            const tratamiento = await model.tratamiento.create(req.body)
+    
+            res.json({
+                success:true,
+                data:{
+                    tratamiento: tratamiento
+                }
+            })
+        }catch(err){
+            res.json({
+                success: false,
+                message: err
+            })
+        }   
     }
 }
