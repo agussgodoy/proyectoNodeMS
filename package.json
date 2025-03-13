@@ -17,11 +17,14 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "db:create": "npx sequelize-cli db:create",
+    "db:seed": "npx squelize db:seed:all",
+    "db:migration": "npx sequelize db:migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "joi": "^17.13.3",
     "morgan": "^1.10.0",
     "pg": "^8.13.3",
     "pg-hstore": "^2.3.4",

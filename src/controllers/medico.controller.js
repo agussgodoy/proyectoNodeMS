@@ -1,11 +1,18 @@
 
-const model = require('../database/models/index')
+const models = require('../database/models/index')
 
 module.exports = {
 
     listar: async (req, res) => {
 
-        const medicos = await model.medico.findAll()
+        const medicos = await models.medico.findAll({
+            include: [{
+                model: models.paciente_medico,
+                include: [{
+                    model: models.paciente
+                }]
+            }]
+        })
 
 
         res.json({
@@ -19,7 +26,7 @@ module.exports = {
     crear: async(req, res) =>{
         
         try{
-            const medico = await model.medico.create(req.body)
+            const medico = await models.medico.create(req.body)
 
             res.json({
                 success: true,
@@ -35,10 +42,16 @@ module.exports = {
 
     infoMedico: async (req,res) => {
 
-        const medico = await model.medico.findOne({
+        const medico = await models.medico.findOne({
             where:{
                 id: req.params.idMedico
-            }
+            },
+            include:[{
+                model: models.paciente_medico,
+                include: [{
+                    model: models.paciente
+                }]
+            }]
         })
 
         if(medico){

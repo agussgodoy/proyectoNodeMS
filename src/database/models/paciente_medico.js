@@ -1,29 +1,14 @@
-'use strict' 
+'use strict'
 
 module.exports = (sequelize, DataTypes) => {
 
-    let Paciente = sequelize.define('paciente',{
-        
+    let PacienteMedico = sequelize.define('paciente_medico', {
+
         id: {
             type: DataTypes.BIGINT, // defino tipo de dato
             autoIncrement: true, // autoincrementable
             primaryKey: true, // clave primaria
             allowNull: false // no se permite nulos
-        },
-        nombre: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        apellido: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email:{
-            type: DataTypes.STRING,
-        },
-        telefono:{
-            type: DataTypes.STRING,
-            allowNull: true
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -46,10 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         freezeTableName: true //no va a modificar el nombre de la tabla a plural. Si no pongo eso, sequelize me la va a nombrar como Usuarios
     })
 
-    Paciente.associate = models =>{
-        // acá se relacionan las tablas de la base de datos
-        Paciente.hasMany(models.paciente_medico)
+    PacienteMedico.associate = models => {
+        
+        PacienteMedico.belongsTo(models.medico)
+        PacienteMedico.belongsTo(models.paciente)
     }
 
-    return Paciente
+    return PacienteMedico
 }

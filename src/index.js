@@ -4,6 +4,8 @@ const express = require('express')
 const routerConfig = require('./routes/index.routes')
 const globalConstants = require('./const/globalConstants')
 const logger = require('morgan');
+const errorHandler = require('./middlewares/error')
+let createError = require('http-errors') // manejo de errores http
 
 
 
@@ -22,6 +24,13 @@ const configuracionApi = (app) =>{
 // configura las rutas de la api
 const configRouter = (app) =>{
     app.use('/api/', routerConfig.rutas_init())
+
+    // si la ruta no existe, me crea un error 404
+    app.use(function(req, res, next){
+        next(createError(404))
+    })
+    
+    app.use(errorHandler)
 }
 
 const init = () =>{

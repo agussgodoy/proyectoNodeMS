@@ -1,12 +1,20 @@
 
-const model = require('../database/models/index')
+const models = require('../database/models/index')
+const errors = require('../const/errors')
 
 module.exports = {
 
 
     listar: async (req, res) => {
 
-        const pacientes = await model.paciente.findAll()
+        const pacientes = await models.paciente.findAll({
+            include: [{
+                model: models.paciente_medico,
+                include:[{
+                    model: models.medico
+                }]
+            }]
+        })
 
         res.json({
             success: true,
@@ -16,11 +24,17 @@ module.exports = {
         })
     },
 
-    crear: async (req, res) => {
+    crear: async (req, res, next) => {
 
         try{
 
-            const paciente = await model.paciente.create(req.body)
+            const paciente = await models.paciente.create(req.body)
+
+            const relacion = await models.paciente_medico.create({
+                pacienteId: paciente.id,
+                medicoId: req.body.medicoId
+            })
+
 
             res.json({
                 success: true,
@@ -31,17 +45,23 @@ module.exports = {
         }catch(err){
             res.json({
                 success: false,
-                message: err
+                message: next(err)
             })
         }
     },
 
-    listarInfo: async (req, res) => {
+    listarInfo: async (req, res, next) => {
 
-        const paciente = await model.paciente.findOne({
+        const paciente = await models.paciente.findOne({
             where: {
                 id: req.params.idPaciente
-            }
+            },
+            include:[{
+                model: models.paciente_medico,
+                include:[{
+                    model: models.medico
+                }]
+            }]
         })
 
         if(paciente){
@@ -52,16 +72,13 @@ module.exports = {
                 }
             })
         }else{
-            res.json({
-                success:false,
-                message: 'No se encontró el paciente.'
-            })
+            return next(errors.PacienteInexistente)
         }
     },
 
     modificar: async (req, res) => {
         
-        const paciente = await model.paciente.update({
+        const paciente = await models.paciente.update({
             nombre: req.body.nombre
         },{
             where:{
