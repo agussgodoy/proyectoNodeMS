@@ -7,7 +7,11 @@ module.exports = {
 
     listar: async (req, res) => {
 
-        const users = await models.usuario.findAll()
+        const users = await models.usuario.findAll({
+            attributes: {
+                exclude: ['password']
+            }
+        })
 
         res.json({
             success: true,
@@ -21,6 +25,9 @@ module.exports = {
         const user = await models.usuario.findOne({
             where: {
                 id: req.params.idUsuario
+            },
+            attributes: {
+                exclude: ['password']
             }
         })
 
@@ -33,17 +40,24 @@ module.exports = {
     }, 
 
     crear: async (req, res) => {
+        try{
 
-        // como el body va a tener los mismos nombres que los campos de la tabla usuario
-        // directamente le paso todo el body. Sino tendría que setear los campos uno a uno
-        const user = await models.usuario.create(req.body)
-
-        res.json({
-            success: true,
-            data:{
-                id: user.id
-            }
-        })
+            // como el body va a tener los mismos nombres que los campos de la tabla usuario
+            // directamente le paso todo el body. Sino tendría que setear los campos uno a uno
+            const user = await models.usuario.create(req.body)
+    
+            user.password = user.cryptPassword(user.password)
+            await user.save()
+    
+            res.json({
+                success: true,
+                data:{
+                    id: user.id
+                }
+            })
+        }catch(err){
+            return next(err)
+        }
     },
 
     prueba: async (req, res) => {

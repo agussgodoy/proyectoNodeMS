@@ -24,7 +24,8 @@ const configuracionApi = (app) =>{
 // configura las rutas de la api
 const configRouter = (app) =>{
     app.use('/api/', routerConfig.rutas_init())
-
+    app.use('/', routerConfig.rutas_auth())
+    
     // si la ruta no existe, me crea un error 404
     app.use(function(req, res, next){
         next(createError(404))

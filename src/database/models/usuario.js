@@ -1,4 +1,7 @@
-'use strict' // para que no se puedan usar variables no definidas
+'use strict'
+const { allow } = require("joi")
+
+ // para que no se puedan usar variables no definidas
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -23,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         edad: {
             type: DataTypes.INTEGER,
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
         createdAt: {
             type: DataTypes.DATE,
